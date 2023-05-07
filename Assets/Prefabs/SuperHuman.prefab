@@ -66,7 +66,7 @@ MonoBehaviour:
   isAttacking: 0
   isGameover: 0
   isHittingTower: 0
-  speed: 5
+  speed: 1
   hp: 0
   towerHp: 0
   targetX: 0

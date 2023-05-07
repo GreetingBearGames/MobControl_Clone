@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 8323688847779832483}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 1.49, y: 1.4698932, z: -13.17}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8361240112070364092}
   m_Father: {fileID: 0}
@@ -65,9 +65,8 @@ MonoBehaviour:
   Target: {fileID: 0}
   isAttacking: 0
   isGameover: 0
-  isWin: 0
   isHittingTower: 0
-  speed: 5
+  speed: 1
   hp: 0
   towerHp: 0
   targetX: 0

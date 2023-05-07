@@ -7,21 +7,22 @@ public class Thrower : MonoBehaviour
     [SerializeField]private GameObject humanPrefab, superHumanPrefab;
     [SerializeField]private float cannonSpeed;
     private bool isMousePressed = false, isMoving = false, release, instantiateSuperHuman;
-    [SerializeField]private float xRange, xCenter, direction, slideSpeed, mouseDeltaX, zStartPos, releaseAmountPerHuman, totalRelease, currentRelease;
+    private float xRange, xCenter, direction, slideSpeed, mouseDeltaX, zStartPos, releaseAmountPerHuman, totalRelease;
     Vector3 mousePos;
     public List <Transform> targets;
     private IEnumerator coroutine;
+    [SerializeField]private BallBarController ballBarController;
     private void Awake() {
         release = false;
-        currentRelease = 0.0f;
         releaseAmountPerHuman = 2.0f;
         totalRelease = 20.0f;
+        ballBarController.shootMaxValue = totalRelease;
         zStartPos = transform.position.z;
         xCenter = transform.position.x;
-        xRange = this.gameObject.GetComponent<Renderer>().bounds.size.x;
+        //xRange = this.gameObject.GetComponent<Renderer>().bounds.size.x;
     }
     private void Start() {
-        coroutine = MoveToTarget(targets[HumanMove.i].position);
+        coroutine = MoveToTarget(targets[HumanMove.i]);
         HumanMove.i++;
         StartCoroutine(coroutine);
     }
@@ -61,26 +62,29 @@ public class Thrower : MonoBehaviour
     private void InstantiateAndThrow(){
         if(isMousePressed && instantiateSuperHuman){
             GameObject go = Instantiate(superHumanPrefab, this.transform.position, Quaternion.identity);
-            go.transform.DOJump(new Vector3(transform.position.x, transform.position.y, transform.position.z + 5), 0.4f, 1, 0.2f);
+            go.transform.DOJump(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), 0.4f, 1, 0.2f);
             instantiateSuperHuman = false;
-            currentRelease = 0;
+            ballBarController.DischargeTheBar();
         }
         else if (isMousePressed && !instantiateSuperHuman){
-            currentRelease += releaseAmountPerHuman;
+            ballBarController.shootedValue+=releaseAmountPerHuman;
             GameObject go = Instantiate(humanPrefab, this.transform.position, Quaternion.identity);
-            go.transform.DOJump(new Vector3(transform.position.x, transform.position.y, transform.position.z + 5), 0.2f, 1, 0.2f);
+            go.transform.DOJump(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), 0.2f, 1, 0.2f);
         }
     }
-    private IEnumerator MoveToTarget(Vector3 target){
+    private IEnumerator MoveToTarget(Transform target){
         isMoving = true;
-        transform.DOLocalMove(target, Vector3.Distance(target, transform.position)/cannonSpeed);
-        yield return new WaitForSeconds(1);
+        transform.DOLocalMove(target.position, Vector3.Distance(target.position, transform.position)/cannonSpeed);
+        HumanMove.i++;
+        yield return new WaitForSeconds(0.5f);
+        transform.DOLocalRotateQuaternion(target.rotation, 0.2f);
+        transform.DOLocalMove(target.position, Vector3.Distance(target.position, transform.position)/cannonSpeed);
         isMoving = false;
     }
     private void DestroyTower(){
         if(HumanMove.isWin){
             CancelInvoke("InstantiateAndThrow");
-            coroutine = MoveToTarget(targets[HumanMove.i].position);
+            coroutine = MoveToTarget(targets[HumanMove.i]);
             HumanMove.i++;
             StartCoroutine(coroutine);
             HumanMove.isWin = false;
@@ -100,9 +104,7 @@ public class Thrower : MonoBehaviour
         }
     }
     private void Release(){
-        Debug.Log("Current release - Total Release : " + currentRelease + "-" + totalRelease);
-        if(currentRelease >= totalRelease){
-            Debug.Log("Now Release");
+        if(ballBarController.shootedValue >= totalRelease){
             release = true;
         }
     }

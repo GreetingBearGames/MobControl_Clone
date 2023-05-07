@@ -10,9 +10,9 @@ public class BallBarController : MonoBehaviour
     [SerializeField] Image fillImageYellow;
     [SerializeField] GameObject releaseImage;
 
-    [SerializeField] public int shootMaxValue;
-    private int _shootedValue;
-    public int shootedValue // The amount will be increased as the shot is made
+    [SerializeField] public float shootMaxValue;
+    private float _shootedValue;
+    public float shootedValue // The amount will be increased as the shot is made
     {
         get { return _shootedValue; }
         set { _shootedValue = value; 
@@ -26,11 +26,11 @@ public class BallBarController : MonoBehaviour
     }
 
     private void FillTheBar(){
-        fillImageBlue.fillAmount = (float)shootedValue / (float)shootMaxValue;
+        fillImageBlue.fillAmount = shootedValue / shootMaxValue;
         if (fillImageBlue.fillAmount == 1)
         {            
-            fillImageYellow.enabled = true;
-            fillImageBlue.enabled = false;
+            fillImageYellow.gameObject.SetActive(true);
+            fillImageBlue.gameObject.SetActive(false);
             releaseImage.SetActive(true);
         }
     }
@@ -38,7 +38,7 @@ public class BallBarController : MonoBehaviour
     public void DischargeTheBar(){ // This will be run when strong shot is made
         shootedValue = 0;
         releaseImage.SetActive(false);
-        fillImageBlue.enabled = true;
-        fillImageYellow.enabled = false;        
+        fillImageBlue.gameObject.SetActive(true);
+        fillImageYellow.gameObject.SetActive(false);        
     }
 }

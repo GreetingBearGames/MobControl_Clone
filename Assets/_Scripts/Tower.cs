@@ -14,6 +14,6 @@ public class Tower : MonoBehaviour
 
     private void InstantiateAndThrow(){
         GameObject go = Instantiate(prefab, this.transform.position, Quaternion.identity);
-        go.transform.DOJump(new Vector3(transform.position.x + Random.Range(-2f, 2f), transform.position.y, transform.position.z - 5), 0.2f, 1, 0.2f);
+        go.transform.DOJump(new Vector3(transform.position.x + Random.Range(-1f, 1f), transform.position.y, transform.position.z - 1), 0.2f, 1, 0.2f);
     }
 }
