@@ -8,6 +8,8 @@ public class CubesManager : MonoBehaviour
 {
     private static CubesManager _instance; 
     [SerializeField] GameUIController gameUIController;
+
+    [SerializeField] Transform target;
     [SerializeField] GameObject cubePrefab;
 
     Queue<GameObject> cubesQueue = new Queue<GameObject>();
@@ -48,8 +50,10 @@ public class CubesManager : MonoBehaviour
                 GameObject cube = cubesQueue.Dequeue(); 
                 cube.SetActive(true);
                 cube.transform.position = castlePosition;
+                //cube.transform.parent = target;
+                
 
-                cube.transform.DOMove(transform.position,duration)
+                cube.transform.DOMove(target.position,duration)
                     .SetEase(easeType)
                     .OnComplete(()=>{
                         cube.SetActive(false);
