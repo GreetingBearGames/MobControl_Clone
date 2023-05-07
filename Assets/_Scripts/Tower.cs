@@ -2,14 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 
 public class Tower : MonoBehaviour
 {
     [SerializeField]private GameObject prefab;
+    [SerializeField] private TMP_Text towerHPText;
     public static float towerHp = 100f;
     void Start()
     {
         InvokeRepeating("InstantiateAndThrow",2, 1f);
+    }
+
+    private void Update() {
+        towerHPText.text = Mathf.Ceil(towerHp).ToString();
     }
 
     private void InstantiateAndThrow(){
