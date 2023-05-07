@@ -3673,9 +3673,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ed6da1a07b34b94185486247526106f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cubesText: {fileID: 794231363}
-  goldText: {fileID: 1224024421}
-  countWaitTimer: 0.2
+  cubesText: {fileID: 397745144}
+  goldText: {fileID: 15162556}
+  countWaitTimer: 0.005
 --- !u!114 &909691605
 MonoBehaviour:
   m_ObjectHideFlags: 0

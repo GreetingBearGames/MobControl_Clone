@@ -14,6 +14,7 @@ public class GameUIController : MonoBehaviour
         get { return _goldsCount; }
         set { _goldsCount = value; 
             goldsText.text = goldsCount.ToString();
+            PlayerPrefs.SetInt("goldsCount",goldsCount);
         }
     }
     
@@ -25,6 +26,7 @@ public class GameUIController : MonoBehaviour
         set { _cubesCount = value; 
             cubesText.text = cubesCount.ToString();
             cubesHolderAnimator.SetTrigger("Shake");
+            PlayerPrefs.SetInt("cubesCount",cubesCount);
             }
     }
     

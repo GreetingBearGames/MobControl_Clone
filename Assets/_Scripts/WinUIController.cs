@@ -13,26 +13,32 @@ public class WinUIController : MonoBehaviour
 
     int cubeCount;
     int goldCount;
-
+    int tempGold=0;
+    int tempCube=0;
     private void Start() {
-        // levelde toplanan cube ve gold sayıları managerden alınacak
+
+        goldCount = PlayerPrefs.GetInt("goldsCount");
+        cubeCount = PlayerPrefs.GetInt("cubesCount");
+        StartCoroutine(CountLoot());
     }
 
     IEnumerator CountLoot(){
-        int tempGold=0;
-        int tempCube=0;
-
-        while(tempGold < goldCount){
+        if(tempGold < goldCount){
             tempGold++;
             goldText.text = tempGold.ToString();
         }
 
-        while(tempCube < cubeCount){
+        if(tempCube < cubeCount){
             tempCube++;
             cubesText.text = tempCube.ToString();
         }
 
         yield return new WaitForSeconds(countWaitTimer);
+        if (tempGold == goldCount && tempCube == cubeCount)
+        {
+            StopCoroutine(CountLoot());
+        }
+        StartCoroutine(CountLoot());
     }
 
     public void NextButton(){
