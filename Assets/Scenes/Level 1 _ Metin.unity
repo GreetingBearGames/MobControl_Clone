@@ -3126,6 +3126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 8323688847779832483, guid: 93bf104757e6abf46a82a502aba1e4c9, type: 3}
   towerHPText: {fileID: 0}
+  progressBar: {fileID: 0}
 --- !u!1 &813983115
 GameObject:
   m_ObjectHideFlags: 0
@@ -6106,6 +6107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 8323688847779832483, guid: 93bf104757e6abf46a82a502aba1e4c9, type: 3}
   towerHPText: {fileID: 668201248}
+  progressBar: {fileID: 98241398}
 --- !u!1 &1682345377
 GameObject:
   m_ObjectHideFlags: 0
@@ -7203,6 +7205,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 963194227}
+    - target: {fileID: 295018016726099449, guid: dd9ee1740de654b56acedb6227d65bab, type: 3}
+      propertyPath: m_SortingOrder
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 3882383395190116581, guid: dd9ee1740de654b56acedb6227d65bab, type: 3}
       propertyPath: m_Name
       value: Cannon
@@ -7307,6 +7313,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1682176227}
     m_Modifications:
+    - target: {fileID: 4550449553066143891, guid: bc268e0919427284db0e7d78543a6a48, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 963194227}
+    - target: {fileID: 4550449553066143891, guid: bc268e0919427284db0e7d78543a6a48, type: 3}
+      propertyPath: m_SortingOrder
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 6250548995497173804, guid: bc268e0919427284db0e7d78543a6a48, type: 3}
       propertyPath: m_Name
       value: kale
