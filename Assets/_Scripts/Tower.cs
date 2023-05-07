@@ -6,7 +6,7 @@ using TMPro;
 
 public class Tower : MonoBehaviour
 {
-    [SerializeField]private GameObject prefab;
+    [SerializeField]private GameObject enemyPrefab, particlePrefab;
     [SerializeField] private TMP_Text towerHPText;
 
     [SerializeField] GameObject progressBar;
@@ -23,13 +23,15 @@ public class Tower : MonoBehaviour
     }
 
     private void InstantiateAndThrow(){
-        GameObject go = Instantiate(prefab, this.transform.position, Quaternion.identity);
+        GameObject go = Instantiate(enemyPrefab, this.transform.position, Quaternion.identity);
         go.transform.DOJump(new Vector3(transform.position.x + Random.Range(-1f, 1f), transform.position.y, transform.position.z - 1), 0.2f, 1, 0.2f);
     }
 
     private void GiveCube(){
         if (maxHP-towerHp > givedCubeCount)
         {
+            if(!this.transform.GetChild(0).GetChild(11).GetComponent<ParticleSystem>().isPlaying)
+                this.transform.GetChild(0).GetChild(11).GetComponent<ParticleSystem>().Play();
             CubesManager.Instance.AddCube(transform.position);
             givedCubeCount++;
         }
@@ -38,5 +40,6 @@ public class Tower : MonoBehaviour
     private void OnDestroy() {
         progressBar.SetActive(true);
         Destroy(progressBar,2f);
+        Instantiate(particlePrefab, transform.position, Quaternion.identity);
     }
 }

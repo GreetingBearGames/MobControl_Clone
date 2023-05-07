@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class BallBarController : MonoBehaviour
 {
     
-    [SerializeField] Image fillImageBlue;
+    public Image fillImageBlue;
     [SerializeField] Image fillImageYellow;
     [SerializeField] GameObject releaseImage;
 
@@ -27,6 +27,7 @@ public class BallBarController : MonoBehaviour
 
     private void FillTheBar(){
         fillImageBlue.fillAmount = shootedValue / shootMaxValue;
+
         if (fillImageBlue.fillAmount == 1)
         {            
             fillImageYellow.gameObject.SetActive(true);

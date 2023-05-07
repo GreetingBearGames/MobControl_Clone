@@ -12,9 +12,11 @@ public class HumanMove : MonoBehaviour
     private Rigidbody rb;
     private Animator anim;
     private Vector3 target;
-
+    [SerializeField]private GameUIController gameUIController;
+    [SerializeField]private GameObject superHumanParticlePrefab, enemyDeathParticle, humanDeathParticle;
 
     private void Awake() {
+        gameUIController = GameObject.FindGameObjectWithTag("GameUITag").GetComponent<GameUIController>();
         if(this.CompareTag("Human") || this.CompareTag("SuperHuman")){
             Target = GameObject.FindGameObjectWithTag("Tower").transform;
         }
@@ -65,6 +67,18 @@ public class HumanMove : MonoBehaviour
             Freeze();
             hp -= 100f * Time.deltaTime;
             if(hp <= 0){
+                if(this.gameObject.CompareTag("SuperHuman")){
+                    Instantiate(superHumanParticlePrefab, this.transform.position + new Vector3(0,4.2f,0), Quaternion.identity);
+                }
+                else if(other.gameObject.CompareTag("Enemy")){
+                    gameUIController.goldsCount++;
+                    Instantiate(enemyDeathParticle, this.transform.position + new Vector3(0,2.6f,0), Quaternion.identity);
+                }
+                else if(other.gameObject.CompareTag("Human")){
+                    gameUIController.goldsCount++;
+                    Instantiate(humanDeathParticle, this.transform.position + new Vector3(0,2.6f,0), Quaternion.identity);
+                }
+
                 Destroy(this.gameObject);
             }
         }
@@ -80,13 +94,17 @@ public class HumanMove : MonoBehaviour
     private void OnCollisionEnter(Collision other) {
         if(this.gameObject.CompareTag("Enemy") && other.gameObject.CompareTag("Thrower")){
             isGameover = true;
+            StartCoroutine(Camera.main.GetComponent<ScreenShake>().Shaking());
         }
-        else if(this.gameObject.CompareTag("Human") && other.gameObject.CompareTag("Gate")){
+        else if((this.gameObject.CompareTag("Human") || this.gameObject.CompareTag("SuperHuman")) && other.gameObject.CompareTag("Gate")){
+            if(!other.gameObject.transform.parent.GetChild(5).GetComponent<ParticleSystem>().isPlaying){
+                other.gameObject.transform.parent.GetChild(5).GetComponent<ParticleSystem>().Play();
+            }
             var text = other.transform.parent.GetChild(0).GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text.ToString();
             int multiplier = int.Parse(text.Substring(0, text.Length - 1));
-            for(int i = 0; i < multiplier ; i++){
+            for(int i = 0; i < multiplier-1 ; i++){
                 var pos = transform.position;
-                pos.x = pos.x + Random.Range(-1f, 1f);
+                pos.x = pos.x + Random.Range(-0.25f, 0.25f);
                 pos.z = pos.z + Random.Range(0.5f, 1f);
                 Instantiate(this.gameObject, pos, Quaternion.identity);
             }

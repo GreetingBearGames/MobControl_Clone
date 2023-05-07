@@ -12,6 +12,8 @@ TagManager:
   - Gate
   - TowerArea
   - SuperHuman
+  - GameUITag
+  - TowerDestroy
   layers:
   - Default
   - TransparentFX

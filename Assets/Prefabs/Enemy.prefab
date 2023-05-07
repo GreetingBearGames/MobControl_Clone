@@ -70,6 +70,10 @@ MonoBehaviour:
   hp: 0
   towerHp: 0
   targetX: 0
+  gameUIController: {fileID: 0}
+  superHumanParticlePrefab: {fileID: 1434785352540645570, guid: c113f519d995e4e2d97ad9beb6e36c8e, type: 3}
+  enemyDeathParticle: {fileID: 904665420061863299, guid: 0977011245b7eee4c9aaa4cb13d2f2d9, type: 3}
+  humanDeathParticle: {fileID: 904665420061863299, guid: 48e39a569efa3014dbbea50929f53229, type: 3}
 --- !u!1001 &8323688849763920983
 PrefabInstance:
   m_ObjectHideFlags: 0

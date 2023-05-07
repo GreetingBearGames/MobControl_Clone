@@ -38,6 +38,7 @@ public class Thrower : MonoBehaviour
         }
         DestroyTower();
         Release();
+        GlowParticleScaleChange();
     }
     private void OnMouseDown()
     {
@@ -65,6 +66,7 @@ public class Thrower : MonoBehaviour
             go.transform.DOJump(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), 0.4f, 1, 0.2f);
             instantiateSuperHuman = false;
             ballBarController.DischargeTheBar();
+            this.gameObject.transform.GetChild(6).GetChild(7).gameObject.GetComponent<ParticleSystem>().Play();
         }
         else if (isMousePressed && !instantiateSuperHuman){
             ballBarController.shootedValue+=releaseAmountPerHuman;
@@ -107,5 +109,8 @@ public class Thrower : MonoBehaviour
         if(ballBarController.shootedValue >= totalRelease){
             release = true;
         }
+    }
+    private void GlowParticleScaleChange(){
+        this.transform.GetChild(6).GetChild(6).GetChild(0).GetComponent<RectTransform>().DOScale(Vector3.one * ballBarController.fillImageBlue.fillAmount, 0.1f);
     }
 }
