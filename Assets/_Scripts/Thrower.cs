@@ -22,7 +22,10 @@ public class Thrower : MonoBehaviour
         //xRange = this.gameObject.GetComponent<Renderer>().bounds.size.x;
     }
     private void Start() {
-        transform.DOLocalMove(targets[HumanMove.i].position, Vector3.Distance(targets[HumanMove.i].position, transform.position)/cannonSpeed);
+        transform.DOLocalMove(targets[HumanMove.i].position, Vector3.Distance(targets[HumanMove.i].position, transform.position)/cannonSpeed).OnComplete(()=>{
+            slideToMoveCanvas.SetActive(true);
+            GameObject.FindGameObjectWithTag("CM").GetComponent<Cinemachine.CinemachineFreeLook>().enabled = false;
+            });
         HumanMove.i++;
     }
     void Update()
@@ -57,7 +60,8 @@ public class Thrower : MonoBehaviour
         var slideVector = Camera.main.ScreenToWorldPoint(Input.mousePosition - mousePos);
         var slideAmount = slideVector.x;
         Mathf.Clamp(slideAmount, xCenter-xRange, xCenter+xRange);
-        transform.DOLocalMoveX(slideAmount, 0.1f);
+        //transform.DOMoveX(slideAmount, 0.1f);
+        transform.DOMove((transform.position + transform.right*slideVector.x/10 *Mathf.Cos(this.transform.eulerAngles.y)), 0.1f);
     }
     private void InstantiateAndThrow(){
         if(isMousePressed && instantiateSuperHuman){
@@ -76,19 +80,10 @@ public class Thrower : MonoBehaviour
             go.transform.DOJump(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), 0.2f, 1, 0.2f);
         }
     }
-    private IEnumerator MoveToTarget(Transform target){        
-        isMoving = true;
-        transform.DOLocalMove(target.position, Vector3.Distance(target.position, transform.position)/cannonSpeed);        
-        HumanMove.i++;
-        yield return new WaitForSeconds(0.5f);
-        slideToMoveCanvas.SetActive(true);
-        transform.DOLocalRotateQuaternion(target.rotation, 0.2f);
-        transform.DOLocalMove(target.position, Vector3.Distance(target.position, transform.position)/cannonSpeed);
-        isMoving = false;
-    }
     private void DestroyTower(){
         if(HumanMove.isWin){
             CancelInvoke("InstantiateAndThrow");
+            GameObject.FindGameObjectWithTag("CM").GetComponent<Cinemachine.CinemachineFreeLook>().enabled = true;
             transform.DOLocalMove(targets[HumanMove.i].position, Vector3.Distance(targets[HumanMove.i].position, transform.position)/cannonSpeed).OnComplete(()=>{
                 HumanMove.i++;
                 transform.DORotateQuaternion(targets[HumanMove.i].rotation, 0.2f).OnComplete(()=>{
@@ -100,6 +95,7 @@ public class Thrower : MonoBehaviour
                     towers[2].SetActive(true);
                     towers[3].SetActive(true);
                 }
+                GameObject.FindGameObjectWithTag("CM").GetComponent<Cinemachine.CinemachineFreeLook>().enabled = false;
                 });
             });
             HumanMove.isWin = false;
