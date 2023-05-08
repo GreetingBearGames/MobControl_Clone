@@ -15,9 +15,6 @@ public class Tower : MonoBehaviour
     private int maxHP=100, givedCubeCount=0;
     void Start()
     {
-        victoryCanvas = GameObject.FindGameObjectWithTag("Victory");
-        winUICanvas = GameObject.FindGameObjectWithTag("Win");
-        gameUICanvas = GameObject.FindGameObjectWithTag("GameUITag");
         towerHp = 100f;
         InvokeRepeating("InstantiateAndThrow",2, 1f);
     }
@@ -50,16 +47,9 @@ public class Tower : MonoBehaviour
         progressBar.fillImageIndex++;
         Instantiate(particlePrefab, transform.position, Quaternion.identity);
         if(this.gameObject.name == "Tower (3)" ){
-            coroutine = FinishUI(this.gameObject);
-            StartCoroutine(coroutine);
+            victoryCanvas.SetActive(false);
+            winUICanvas.transform.GetChild(0).gameObject.SetActive(true);
+            gameUICanvas.SetActive(false);
         }
-    }
-        private IEnumerator FinishUI(GameObject obj){
-        victoryCanvas.SetActive(true);
-        yield return new WaitForSeconds(5);
-        victoryCanvas.SetActive(false);
-        Destroy(obj);
-        winUICanvas.SetActive(true);
-        gameUICanvas.SetActive(false);
     }
 }

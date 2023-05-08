@@ -5,7 +5,7 @@ using UnityEngine;
 public class HumanMove : MonoBehaviour
 {
     [SerializeField]private Transform Target;
-    IEnumerator coroutine;
+    
     [SerializeField]private bool isAttacking, isGameover, isHittingTower;
     [SerializeField]private float speed, hp, towerHp, targetX;
     public static bool isWin = false;
@@ -14,7 +14,7 @@ public class HumanMove : MonoBehaviour
     private Animator anim;
     private Vector3 target;
     [SerializeField]private GameUIController gameUIController;
-    [SerializeField]private GameObject superHumanParticlePrefab, enemyDeathParticle, humanDeathParticle, victoryCanvas, winUICanvas, gameUICanvas;
+    [SerializeField]private GameObject superHumanParticlePrefab, enemyDeathParticle, humanDeathParticle, victory;
     private void Awake() {
         gameUIController = GameObject.FindGameObjectWithTag("GameUITag").GetComponent<GameUIController>();
         if(this.CompareTag("Human") || this.CompareTag("SuperHuman")){
@@ -28,9 +28,7 @@ public class HumanMove : MonoBehaviour
 
     }
     private void Start() {
-        victoryCanvas = GameObject.FindGameObjectWithTag("Victory");
-        winUICanvas = GameObject.FindGameObjectWithTag("Win");
-        gameUICanvas = GameObject.FindGameObjectWithTag("GameUITag");
+        victory = GameObject.FindGameObjectWithTag("Victory");
         if(this.CompareTag("SuperHuman"))
             hp = 300;
         else
@@ -89,12 +87,14 @@ public class HumanMove : MonoBehaviour
             isHittingTower = true;
             Tower.towerHp -= 1f * Time.deltaTime;
             if(Tower.towerHp <= 0){
-                isWin = true;
-                Destroy(other.gameObject);
-                if(other.gameObject.name == "Tower (3)" ){
-                    coroutine = FinishUI(other.gameObject);
-                    StartCoroutine(coroutine);
+                if(other.gameObject.name == "Tower (3)"){
+                    victory.transform.GetChild(0).gameObject.SetActive(true);
+                    Destroy(other.gameObject, 5f);
                 }
+                else{
+                    Destroy(other.gameObject);
+                }
+                isWin = true;
             }
         }
     }
@@ -125,13 +125,5 @@ public class HumanMove : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         if(current == hp)
             isAttacking = false;
-    }
-    private IEnumerator FinishUI(GameObject obj){
-        victoryCanvas.SetActive(true);
-        yield return new WaitForSeconds(5);
-        victoryCanvas.SetActive(false);
-        Destroy(obj);
-        winUICanvas.SetActive(true);
-        gameUICanvas.SetActive(false);
     }
 }
