@@ -9,7 +9,7 @@ public class Tower : MonoBehaviour
     [SerializeField]private GameObject enemyPrefab, particlePrefab;
     [SerializeField] private TMP_Text towerHPText;
 
-    [SerializeField] GameObject progressBar;
+    [SerializeField] LevelProgressController progressBar;
     public static float towerHp = 100f;
     private int maxHP=100, givedCubeCount=0;
     void Start()
@@ -38,8 +38,8 @@ public class Tower : MonoBehaviour
     }
 
     private void OnDestroy() {
-        progressBar.SetActive(true);
-        Destroy(progressBar,2f);
+        progressBar.gameObject.SetActive(true);
+        progressBar.fillImageIndex++;
         Instantiate(particlePrefab, transform.position, Quaternion.identity);
     }
 }

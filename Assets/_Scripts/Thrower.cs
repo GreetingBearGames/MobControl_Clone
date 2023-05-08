@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 public class Thrower : MonoBehaviour
 {
-    [SerializeField]private GameObject humanPrefab, superHumanPrefab;
+    [SerializeField]private GameObject humanPrefab, superHumanPrefab,slideToMoveCanvas;
     [SerializeField]private float cannonSpeed;
     private bool isMousePressed = false, isMoving = false, release, instantiateSuperHuman;
     private float xRange, xCenter, direction, slideSpeed, mouseDeltaX, zStartPos, releaseAmountPerHuman, totalRelease;
@@ -74,11 +74,12 @@ public class Thrower : MonoBehaviour
             go.transform.DOJump(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), 0.2f, 1, 0.2f);
         }
     }
-    private IEnumerator MoveToTarget(Transform target){
+    private IEnumerator MoveToTarget(Transform target){        
         isMoving = true;
-        transform.DOLocalMove(target.position, Vector3.Distance(target.position, transform.position)/cannonSpeed);
+        transform.DOLocalMove(target.position, Vector3.Distance(target.position, transform.position)/cannonSpeed);        
         HumanMove.i++;
         yield return new WaitForSeconds(0.5f);
+        slideToMoveCanvas.SetActive(true);
         transform.DOLocalRotateQuaternion(target.rotation, 0.2f);
         transform.DOLocalMove(target.position, Vector3.Distance(target.position, transform.position)/cannonSpeed);
         isMoving = false;

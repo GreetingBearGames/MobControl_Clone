@@ -503,7 +503,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 963194227}
   m_PlaneDistance: 2
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -2878,7 +2878,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 0}
   particlePrefab: {fileID: 0}
   towerHPText: {fileID: 0}
-  progressBar: {fileID: 0}
+  progressBar: {fileID: 1861607544}
 --- !u!1 &811966016
 GameObject:
   m_ObjectHideFlags: 0
@@ -5280,6 +5280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   humanPrefab: {fileID: 8363100323609013027, guid: 897afb1aed53c374a9f56822ab8b1f26, type: 3}
   superHumanPrefab: {fileID: 8363100323609013027, guid: 30a0fb04aa8920944bd722932429a513, type: 3}
+  slideToMoveCanvas: {fileID: 0}
   cannonSpeed: 10
   targets:
   - {fileID: 0}
@@ -5773,7 +5774,7 @@ GameObject:
   - component: {fileID: 1861607543}
   - component: {fileID: 1861607542}
   - component: {fileID: 1861607541}
-  - component: {fileID: 1861607540}
+  - component: {fileID: 1861607544}
   m_Layer: 0
   m_Name: LevelProgressCanvas
   m_TagString: Untagged
@@ -5803,21 +5804,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1861607540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1861607538}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ed6da1a07b34b94185486247526106f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cubesText: {fileID: 0}
-  goldText: {fileID: 0}
-  countWaitTimer: 0
 --- !u!114 &1861607541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5868,7 +5854,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 963194227}
   m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -5879,6 +5865,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1861607544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861607538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 029b784300c532643a5022afb84f1557, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1869277375
 GameObject:
   m_ObjectHideFlags: 0
@@ -6029,7 +6027,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 8323688847779832483, guid: 93bf104757e6abf46a82a502aba1e4c9, type: 3}
   particlePrefab: {fileID: 8044094754940831022, guid: 9cb18b00b815c4d9a8163e62143d277d, type: 3}
   towerHPText: {fileID: 632017906}
-  progressBar: {fileID: 1861607538}
+  progressBar: {fileID: 1861607544}
 --- !u!65 &2000386002
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6264,6 +6262,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 963194227}
     - target: {fileID: 1143432661, guid: dd9ee1740de654b56acedb6227d65bab, type: 3}
+      propertyPath: slideToMoveCanvas
+      value: 
+      objectReference: {fileID: 71600590}
+    - target: {fileID: 1143432661, guid: dd9ee1740de654b56acedb6227d65bab, type: 3}
       propertyPath: targets.Array.data[0]
       value: 
       objectReference: {fileID: 933719113}
@@ -6481,7 +6483,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2136071081
 RectTransform:
   m_ObjectHideFlags: 0
