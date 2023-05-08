@@ -30,6 +30,8 @@ public class Tower : MonoBehaviour
     private void GiveCube(){
         if (maxHP-towerHp > givedCubeCount)
         {
+            if(this.gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !this.gameObject.GetComponent<Animator>().IsInTransition(0))
+                this.GetComponent<Animator>().Play("TowerHitAnimaton", -1, 0);
             if(!this.transform.GetChild(0).GetChild(11).GetComponent<ParticleSystem>().isPlaying)
                 this.transform.GetChild(0).GetChild(11).GetComponent<ParticleSystem>().Play();
             CubesManager.Instance.AddCube(transform.position);

@@ -10,7 +10,7 @@ public class Thrower : MonoBehaviour
     private float xRange, xCenter, direction, slideSpeed, mouseDeltaX, zStartPos, releaseAmountPerHuman, totalRelease;
     Vector3 mousePos;
     public List <Transform> targets;
-    private IEnumerator coroutine;
+    public List <GameObject> towers;
     [SerializeField]private BallBarController ballBarController;
     private void Awake() {
         release = false;
@@ -22,9 +22,8 @@ public class Thrower : MonoBehaviour
         //xRange = this.gameObject.GetComponent<Renderer>().bounds.size.x;
     }
     private void Start() {
-        coroutine = MoveToTarget(targets[HumanMove.i]);
+        transform.DOLocalMove(targets[HumanMove.i].position, Vector3.Distance(targets[HumanMove.i].position, transform.position)/cannonSpeed);
         HumanMove.i++;
-        StartCoroutine(coroutine);
     }
     void Update()
     {
@@ -62,6 +61,7 @@ public class Thrower : MonoBehaviour
     }
     private void InstantiateAndThrow(){
         if(isMousePressed && instantiateSuperHuman){
+            this.gameObject.GetComponent<Animator>().Play("CannonShoot",  -1, 0f);;
             GameObject go = Instantiate(superHumanPrefab, this.transform.position, Quaternion.identity);
             go.transform.DOJump(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), 0.4f, 1, 0.2f);
             instantiateSuperHuman = false;
@@ -69,26 +69,29 @@ public class Thrower : MonoBehaviour
             this.gameObject.transform.GetChild(6).GetChild(7).gameObject.GetComponent<ParticleSystem>().Play();
         }
         else if (isMousePressed && !instantiateSuperHuman){
+            this.gameObject.GetComponent<Animator>().Play("CannonShoot",  -1, 0f);
+
             ballBarController.shootedValue+=releaseAmountPerHuman;
             GameObject go = Instantiate(humanPrefab, this.transform.position, Quaternion.identity);
             go.transform.DOJump(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), 0.2f, 1, 0.2f);
         }
     }
-    private IEnumerator MoveToTarget(Transform target){
-        isMoving = true;
-        transform.DOLocalMove(target.position, Vector3.Distance(target.position, transform.position)/cannonSpeed);
-        HumanMove.i++;
-        yield return new WaitForSeconds(0.5f);
-        transform.DOLocalRotateQuaternion(target.rotation, 0.2f);
-        transform.DOLocalMove(target.position, Vector3.Distance(target.position, transform.position)/cannonSpeed);
-        isMoving = false;
-    }
     private void DestroyTower(){
         if(HumanMove.isWin){
             CancelInvoke("InstantiateAndThrow");
-            coroutine = MoveToTarget(targets[HumanMove.i]);
-            HumanMove.i++;
-            StartCoroutine(coroutine);
+            transform.DOLocalMove(targets[HumanMove.i].position, Vector3.Distance(targets[HumanMove.i].position, transform.position)/cannonSpeed).OnComplete(()=>{
+                HumanMove.i++;
+                transform.DORotateQuaternion(targets[HumanMove.i].rotation, 0.2f).OnComplete(()=>{
+                transform.DOLocalMove(targets[HumanMove.i].position, Vector3.Distance(targets[HumanMove.i].position, transform.position)/cannonSpeed);
+                if(HumanMove.i == 2){
+                    towers[1].SetActive(true);
+                }
+                else if(HumanMove.i == 4){
+                    towers[2].SetActive(true);
+                    towers[3].SetActive(true);
+                }
+                });
+            });
             HumanMove.isWin = false;
             foreach(var item in GameObject.FindGameObjectsWithTag("Human")){
                 Destroy(item);
