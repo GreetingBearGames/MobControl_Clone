@@ -6,18 +6,24 @@ using TMPro;
 
 public class Tower : MonoBehaviour
 {
-    [SerializeField]private GameObject enemyPrefab, particlePrefab;
+    [SerializeField]private GameObject enemyPrefab, particlePrefab, victoryCanvas, winUICanvas, gameUICanvas;
     [SerializeField] private TMP_Text towerHPText;
+    IEnumerator coroutine;
 
     [SerializeField] LevelProgressController progressBar;
     public static float towerHp = 100f;
     private int maxHP=100, givedCubeCount=0;
     void Start()
     {
+        victoryCanvas = GameObject.FindGameObjectWithTag("Victory");
+        winUICanvas = GameObject.FindGameObjectWithTag("Win");
+        gameUICanvas = GameObject.FindGameObjectWithTag("GameUITag");
+        towerHp = 100f;
         InvokeRepeating("InstantiateAndThrow",2, 1f);
     }
 
     private void Update() {
+        Debug.Log(towerHp);
         towerHPText.text = Mathf.Ceil(towerHp).ToString();
         GiveCube();
     }
@@ -43,5 +49,17 @@ public class Tower : MonoBehaviour
         progressBar.gameObject.SetActive(true);
         progressBar.fillImageIndex++;
         Instantiate(particlePrefab, transform.position, Quaternion.identity);
+        if(this.gameObject.name == "Tower (3)" ){
+            coroutine = FinishUI(this.gameObject);
+            StartCoroutine(coroutine);
+        }
+    }
+        private IEnumerator FinishUI(GameObject obj){
+        victoryCanvas.SetActive(true);
+        yield return new WaitForSeconds(5);
+        victoryCanvas.SetActive(false);
+        Destroy(obj);
+        winUICanvas.SetActive(true);
+        gameUICanvas.SetActive(false);
     }
 }

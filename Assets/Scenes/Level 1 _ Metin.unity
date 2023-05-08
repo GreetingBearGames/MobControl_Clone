@@ -3124,7 +3124,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589acc71ec2913d479e1acad1a5ff587, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8323688847779832483, guid: 93bf104757e6abf46a82a502aba1e4c9, type: 3}
+  enemyPrefab: {fileID: 0}
+  particlePrefab: {fileID: 0}
+  victoryCanvas: {fileID: 0}
+  winUICanvas: {fileID: 0}
+  gameUICanvas: {fileID: 0}
   towerHPText: {fileID: 0}
   progressBar: {fileID: 0}
 --- !u!1 &813983115
@@ -6105,7 +6109,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589acc71ec2913d479e1acad1a5ff587, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8323688847779832483, guid: 93bf104757e6abf46a82a502aba1e4c9, type: 3}
+  enemyPrefab: {fileID: 0}
+  particlePrefab: {fileID: 0}
+  victoryCanvas: {fileID: 0}
+  winUICanvas: {fileID: 0}
+  gameUICanvas: {fileID: 0}
   towerHPText: {fileID: 668201248}
   progressBar: {fileID: 98241398}
 --- !u!1 &1682345377
@@ -6296,10 +6304,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   humanPrefab: {fileID: 8363100323609013027, guid: 897afb1aed53c374a9f56822ab8b1f26, type: 3}
   superHumanPrefab: {fileID: 8363100323609013027, guid: 30a0fb04aa8920944bd722932429a513, type: 3}
+  slideToMoveCanvas: {fileID: 0}
   cannonSpeed: 10
+  slideSpeed: 0
   targets:
   - {fileID: 0}
   - {fileID: 0}
+  towers: []
   ballBarController: {fileID: 0}
 --- !u!1 &1743047984
 GameObject:

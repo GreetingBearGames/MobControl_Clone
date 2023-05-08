@@ -5,9 +5,9 @@ using DG.Tweening;
 public class Thrower : MonoBehaviour
 {
     [SerializeField]private GameObject humanPrefab, superHumanPrefab,slideToMoveCanvas;
-    [SerializeField]private float cannonSpeed;
+    [SerializeField]private float cannonSpeed, slideSpeed;
     private bool isMousePressed = false, isMoving = false, release, instantiateSuperHuman;
-    private float xRange, xCenter, direction, slideSpeed, mouseDeltaX, zStartPos, releaseAmountPerHuman, totalRelease;
+    private float xRange, xCenter, direction, mouseDeltaX, zStartPos, releaseAmountPerHuman, totalRelease;
     Vector3 mousePos;
     public List <Transform> targets;
     public List <GameObject> towers;
@@ -59,42 +59,60 @@ public class Thrower : MonoBehaviour
     private void OnMouseDrag() {
         var slideVector = Camera.main.ScreenToWorldPoint(Input.mousePosition - mousePos);
         var slideAmount = slideVector.x;
-        Mathf.Clamp(slideAmount, xCenter-xRange, xCenter+xRange);
-        //transform.DOMoveX(slideAmount, 0.1f);
-        transform.DOMove((transform.position + transform.right*slideVector.x/10 *Mathf.Cos(this.transform.eulerAngles.y)), 0.1f);
+        
+        if(HumanMove.i == 3){
+            transform.parent.DOLocalMoveX((transform.right.x * slideAmount)+1.86f, 0.1f);
+            transform.parent.DOLocalMoveZ((transform.right.x * slideAmount)+1.86f, 0.1f);
+        }
+        else if(HumanMove.i > 3){
+            Debug.Log("slideamount" + (transform.right.x * slideAmount));
+            Debug.Log("actual transform" + transform.parent.position);
+            transform.parent.DOLocalMoveX((transform.right.x * slideAmount) +13.1f, 0.1f);
+        }
+        else{
+            transform.parent.DOLocalMoveX(transform.right.x * slideAmount, 0.1f);
+        }
     }
     private void InstantiateAndThrow(){
         if(isMousePressed && instantiateSuperHuman){
             this.gameObject.GetComponent<Animator>().Play("CannonShoot",  -1, 0f);;
-            GameObject go = Instantiate(superHumanPrefab, this.transform.position, Quaternion.identity);
-            go.transform.DOJump(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), 0.4f, 1, 0.2f);
+            GameObject go = Instantiate(superHumanPrefab,new Vector3(this.transform.position.x, superHumanPrefab.transform.position.y, this.transform.position.z), Quaternion.identity);
+            if(HumanMove.i == 3)
+                go.transform.DOJump(new Vector3(transform.position.x - 0.71f, transform.position.y, transform.position.z + 0.71f), 0.4f, 1, 0.2f);
+            else    
+                go.transform.DOJump(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), 0.4f, 1, 0.2f);
             instantiateSuperHuman = false;
             ballBarController.DischargeTheBar();
             this.gameObject.transform.GetChild(6).GetChild(7).gameObject.GetComponent<ParticleSystem>().Play();
         }
         else if (isMousePressed && !instantiateSuperHuman){
             this.gameObject.GetComponent<Animator>().Play("CannonShoot",  -1, 0f);
-
             ballBarController.shootedValue+=releaseAmountPerHuman;
-            GameObject go = Instantiate(humanPrefab, this.transform.position, Quaternion.identity);
-            go.transform.DOJump(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), 0.2f, 1, 0.2f);
+            GameObject go = Instantiate(humanPrefab, new Vector3(this.transform.position.x, humanPrefab.transform.position.y, this.transform.position.z), Quaternion.identity);
+            if(HumanMove.i == 3)
+                go.transform.DOJump(new Vector3(transform.position.x - 0.71f, transform.position.y, transform.position.z + 0.71f), 0.2f, 1, 0.2f);
+            else    
+                go.transform.DOJump(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), 0.2f, 1, 0.2f);
         }
     }
     private void DestroyTower(){
         if(HumanMove.isWin){
             CancelInvoke("InstantiateAndThrow");
             GameObject.FindGameObjectWithTag("CM").GetComponent<Cinemachine.CinemachineFreeLook>().enabled = true;
-            transform.DOLocalMove(targets[HumanMove.i].position, Vector3.Distance(targets[HumanMove.i].position, transform.position)/cannonSpeed).OnComplete(()=>{
+            transform.DOMove(targets[HumanMove.i].position, Vector3.Distance(targets[HumanMove.i].position, transform.position)/cannonSpeed).OnComplete(()=>{
                 HumanMove.i++;
                 transform.DORotateQuaternion(targets[HumanMove.i].rotation, 0.2f).OnComplete(()=>{
-                transform.DOLocalMove(targets[HumanMove.i].position, Vector3.Distance(targets[HumanMove.i].position, transform.position)/cannonSpeed);
+                transform.DOMove(targets[HumanMove.i].position, Vector3.Distance(targets[HumanMove.i].position, transform.position)/cannonSpeed);
                 if(HumanMove.i == 2){
                     towers[1].SetActive(true);
+                    Tower.towerHp = 100f;
                 }
                 else if(HumanMove.i == 4){
                     towers[2].SetActive(true);
                     towers[3].SetActive(true);
+                    Tower.towerHp = 100f;
                 }
+                HumanMove.i++;
                 GameObject.FindGameObjectWithTag("CM").GetComponent<Cinemachine.CinemachineFreeLook>().enabled = false;
                 });
             });
@@ -109,7 +127,8 @@ public class Thrower : MonoBehaviour
                 Destroy(item);
             }
             foreach(var item in GameObject.FindGameObjectsWithTag("Gate")){
-                Destroy(item);
+                if(item.transform.position.z < 30)
+                    Destroy(item);
             }
 
         }
